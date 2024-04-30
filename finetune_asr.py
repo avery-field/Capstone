@@ -4,10 +4,10 @@ from transformers import WhisperTokenizer
 from transformers import WhisperProcessor
 
 #load dataset
-common_voice = DatasetDict()
 
-common_voice["train"] = load_dataset("mozilla-foundation/common_voice_11_0", "en", split="train+validation", use_auth_token=False)
-common_voice["test"] = load_dataset("mozilla-foundation/common_voice_11_0", "en", split="test", use_auth_token=False)
+common_voice = load_dataset("mozilla-foundation/common_voice_11_0", "en", use_auth_token=False, streaming=True)
+# common_voice["tuneset"] = load_dataset("mozilla-foundation/common_voice_11_0", "en", split="validation", use_auth_token=False, streaming=True)
+# common_voice["test"] = load_dataset("mozilla-foundation/common_voice_11_0", "en", split="test", use_auth_token=False, streaming=True)
 
 #print(common_voice)
 common_voice = common_voice.remove_columns(["accent", "age", "client_id", "down_votes", "gender", "locale", "path", "segment", "up_votes"])
@@ -47,5 +47,5 @@ def prepare_dataset(batch):
     batch["labels"] = tokenizer(batch["sentence"]).input_ids
     return batch
 
-common_voice = common_voice.map(prepare_dataset, remove_columns=common_voice.column_names["train"], num_proc=4)
+common_voice = common_voice.map(prepare_dataset)
 print(common_voice["train"][0])
