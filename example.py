@@ -14,35 +14,13 @@ audio2text = pipeline(
     chunk_length_s=30,
 ) 
 
-# https://huggingface.co/blog/fine-tune-whisper
-
-# prediction = audio2text(sample.copy(), batch_size=8)["text"]
-
-# we can also return timestamps for the predictions
-# prediction = audio2text(sample.copy(), batch_size=8, return_timestamps=True)["chunks"][0]['text']
-# [{'text': ' Mr. Quilter is the apostle of the middle classes and we are glad to welcome his gospel.',
-#   'timestamp': (0.0, 5.44)}]
-
-# Text2Text EN to ES Translation
 
 translator = pipeline("translation", model="Helsinki-NLP/opus-mt-en-es", device='mps')
 
 # Text2Audio ES to Audio
 text2audio = pipeline(model="suno/bark-small")
 
-# output = pipe("Hey it's HuggingFace on the phone!")
-# audio = output["audio"]
-# sampling_rate = output["sampling_rate"]
-
-# vocoder = FastSpeech2ConformerHifiGan.from_pretrained(
-#     "espnet/fastspeech2_conformer_hifigan"
-# )
-#synthesiser = pipeline(model="espnet/fastspeech2_conformer", decoder=vocoder)
-
-# speech = synthesiser("Hello, my dog is cooler than you!")
-
-# sf.write("speech.wav", speech["audio"].squeeze(), samplerate=speech["sampling_rate"])
-
+#writing translations as csv to evaluate translation quality
 import soundfile as sf
 import os
 import csv
@@ -77,7 +55,7 @@ from datasets import load_dataset
 
 fleurs_asr = load_dataset("google/fleurs", "en_us")  # for English
 
-# load audio sample on the fly
+# test out first 50 samples
 audio_inputs = fleurs_asr["train"][:50]["audio"]
 
 output_directory = '~/Desktop/Bootcamp/flytechllm/inference'
